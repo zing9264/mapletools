@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <title>裝備強化模擬器</title>
+  <!-- <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}"> -->
+
+    <!-- Vue 3 -->
+    <script src="https://cdn.jsdelivr.net/npm/vue@3/dist/vue.global.prod.js"></script>
+    <!-- Axios -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <!-- Bootstrap CSS -->
+    <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+    />
+
+</head>
+<body class="p-4">
+  <div id="app" class="container">
+    <h1 class="mb-4">裝備強化模擬器</h1>
+
+    <!-- 表單 -->
+    <form @submit.prevent="submit">
+      <div class="row mb-2">
+        <div class="col"><input v-model.number="form.target_count" type="number" class="form-control" placeholder="目標裝備數量" required></div>
+        <div class="col"><input v-model.number="form.scroll_cost" type="number" class="form-control" placeholder="卷軸價格" required></div>
+      </div>
+      <div class="row mb-2">
+        <div class="col"><input v-model.number="form.success_rate" type="number" step="0.01" class="form-control" placeholder="卷軸成功率 (0~1)" required></div>
+        <div class="col"><input v-model.number="form.max_attempts" type="number" class="form-control" placeholder="最大強化次數" required></div>
+      </div>
+      <button class="btn btn-primary mb-4">開始模擬</button>
+    </form>
+
+    <!-- 最新一次結果 -->
+    <div v-if="lastResult" class="card mb-4">
+    <div class="card-body">
+        <h5 class="card-title">
+        最新模擬結果（ID: <span v-text="lastResult.id"></span>）
+        </h5>
+        <p>時間：<span v-text="lastResult.timestamp"></span></p>
+        <p>總使用卷軸：<span v-text="lastResult.total_scrolls"></span></p>
+        <p>總費用：<span v-text="lastResult.total_cost"></span></p>
+        <h6>強化值分布：</h6>
+        <ul>
+        <li v-for="(c, lvl) in lastResult.distribution" :key="lvl">
+            +<span v-text="lvl"></span>：<span v-text="c"></span> 件
+        </li>
+        </ul>
+    </div>
+    </div>
+
+    <!-- 歷史紀錄按鈕 -->
+    <a href="/records" class="btn btn-secondary">查看歷史紀錄</a>
+  </div>
+
+  <script src="{{ url_for('static', filename='js/vue.global.prod.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/axios.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>
